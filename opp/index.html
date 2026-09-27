@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Classic Romantic Letter & Heart</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- اضافه کردن فونت‌های کلاسیک انگلیسی -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Great+Vibes&family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* پس‌زمینه اصلی */
+        #bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #300008 0%, #0a0003 70%, #000000 100%);
+            z-index: 1;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            touch-action: none;
+        }
+
+        /* متن پایین صفحه */
+        .heart-text {
+            position: absolute;
+            bottom: 4%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 4;
+            color: #fff0f3;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px #ff0055, 0 0 20px #ff0055, 0 0 30px #b3003b;
+            pointer-events: none;
+            opacity: 0;
+            animation: fadeIn 2.5s ease-out 1s forwards;
+            text-align: center;
+            width: 100%;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* =========================================
+           طراحی پاکت و برگه نامه (Classic Letter)
+           ========================================= */
+        .envelope-wrapper {
+            position: absolute;
+            bottom: 16%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 220px;
+            height: 140px;
+            z-index: 10;
+            cursor: pointer;
+            /* پرسپکتیو برای باز شدن طبیعی در */
+            perspective: 1200px; 
+        }
+
+        /* بدنه پاکت */
+        .envelope {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #7a1522; /* قرمز تیره کلاسیک */
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+            transform-style: preserve-3d;
+        }
+
+        /* تای چپ و راست */
+        .left-fold {
+            position: absolute; left: 0; top: 0;
+            border-top: 70px solid transparent; border-bottom: 70px solid transparent;
+            border-left: 110px solid #5e101a; z-index: 3;
+        }
+        .right-fold {
+            position: absolute; right: 0; top: 0;
+            border-top: 70px solid transparent; border-bottom: 70px solid transparent;
+            border-right: 110px solid #5e101a; z-index: 3;
+        }
+        /* تای پایین */
+        .bottom-fold {
+            position: absolute; bottom: 0; left: 0;
+            border-left: 110px solid transparent; border-right: 110px solid transparent;
+            border-bottom: 80px solid #8f1c2a; z-index: 4;
+        }
+        /* در پاکت */
+        .flap {
+            position: absolute; top: 0; left: 0;
+            border-left: 110px solid transparent; border-right: 110px solid transparent;
+            border-top: 85px solid #a32232; z-index: 5;
+            transform-origin: top;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s 0.3s;
+        }
+
+        /* مهر موم پاکت */
+        .wax-seal {
+            position: absolute;
+            bottom: -25px; left: 50%;
+            transform: translateX(-50%);
+            width: 45px; height: 45px;
+            background: #540606;
+            border-radius: 50%;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.6), inset 0 0 10px rgba(0,0,0,0.8);
+            z-index: 6;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .wax-seal::after {
+            content: '♥';
+            color: #9c1515;
+            font-size: 24px;
+        }
+
+        /* --- برگه روغنی (The Letter) --- */
+        .letter {
+            position: absolute;
+            bottom: 5px; /* مخفی در پاکت */
+            left: 15px;
+            width: 190px;
+            height: 125px; /* سایز اولیه بسته */
+            /* بافت کاغذ روغنی و قدیمی */
+            background: #e8ddcb;
+            background-image: 
+                linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 50%, rgba(139, 69, 19, 0.05) 100%),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.12'/%3E%3C/svg%3E");
+            box-shadow: inset 0 0 20px rgba(139,69,19,0.5);
+            z-index: 2;
+            border-radius: 2px;
+            /* انیمیشن باز شدن تا خوردگی ها و بیرون آمدن */
+            transition: 
+                height 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.6s,
+                width 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.6s,
+                left 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.6s,
+                transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.6s,
+                z-index 0s 0.6s, box-shadow 0.8s ease 0.6s;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* خطوط تای برگه */
+        .fold-line {
+            position: absolute;
+            left: 0; width: 100%; height: 1px;
+            background: rgba(139, 69, 19, 0.25);
+            box-shadow: 0 1px 1px rgba(255,255,255,0.6);
+            opacity: 0;
+            transition: opacity 0.5s ease 1s;
+            pointer-events: none;
+        }
+        .fold-1 { top: 33%; }
+        .fold-2 { top: 66%; }
+
+        /* محتوای متن داخل نامه */
+        .letter-content {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.6s ease 1.2s, transform 0.6s ease 1.2s;
+            padding: 30px 20px;
+            width: 100%;
+            height: 100%;
+            color: #3b2b24; /* رنگ جوهر قهوه‌ای سوخته */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .salutation {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .letter-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            line-height: 1.7;
+            text-align: center;
+            font-style: italic;
+        }
+        
+        .closing-wrapper {
+            text-align: right;
+        }
+        .closing {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+        .signature {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* =========================================
+           وقتی روی پاکت کلیک می‌شود (کلاس open)
+           ========================================= */
+        .envelope-wrapper.open .flap {
+            transform: rotateX(180deg);
+            z-index: 1; /* رفتن در پشت نامه */
+        }
+        
+        .envelope-wrapper.open .letter {
+            /* برگه باز می‌شود و به بالا می‌آید */
+            height: 380px; 
+            width: 300px;
+            left: -40px; /* تنظیم وسط قرار گرفتن (220 - 300 / 2) */
+            /* حرکت به سمت مرکز صفحه */
+            transform: translateY(-160px); 
+            z-index: 15; /* آمدن روی پاکت */
+            box-shadow: inset 0 0 40px rgba(139,69,19,0.3), 0 20px 40px rgba(0,0,0,0.7);
+        }
+
+        .envelope-wrapper.open .fold-line { opacity: 1; }
+        
+        .envelope-wrapper.open .letter-content {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* ریسپانسیو برای گوشی‌های کوچک */
+        @media (max-width: 450px) {
+            .envelope-wrapper { transform: translateX(-50%) scale(0.85); bottom: 12%; }
+            .envelope-wrapper.open .letter { transform: translateY(-140px); }
+            .heart-text { font-size: 2rem; bottom: 3%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="bg"></div>
+    <canvas id="canvas"></canvas>
+
+    <!-- پاکت و نامه -->
+    <div class="envelope-wrapper" onclick="this.classList.toggle('open')">
+        <div class="envelope">
+            <div class="letter">
+                <div class="fold-line fold-1"></div>
+                <div class="fold-line fold-2"></div>
+                
+                <div class="letter-content">
+                    <div class="salutation">My Dearest,</div>
+                    <div class="letter-text">
+                        In the quiet moments of my day, my thoughts always drift to you. You are the poetry my heart has always wanted to write.
+                    </div>
+                    <div class="closing-wrapper">
+                        <span class="closing">Yours affectionately,</span>
+                        <span class="signature">Forever</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flap">
+                <div class="wax-seal"></div>
+            </div>
+            <div class="bottom-fold"></div>
+            <div class="left-fold"></div>
+            <div class="right-fold"></div>
+        </div>
+    </div>
+
+    <!-- متن زیر قلب -->
+    <h1 class="heart-text">Always Be Happy</h1>
+
+    <!-- اسکریپت انیمیشن قلب (بهینه شده) -->
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let particles = [];
+        const particleCount = 600;
+        
+        const interaction = { x: null, y: null, radius: 120, active: false };
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        function getHeartPoint(t) {
+            const scale = Math.min(width, height) / 45;
+            const x = 16 * Math.pow(Math.sin(t), 3);
+            const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+            return { x: x * scale, y: y * scale };
+        }
+
+        class Particle {
+            constructor(targetX, targetY) {
+                this.targetX = targetX;
+                this.targetY = targetY;
+                
+                this.x = (Math.random() - 0.5) * width;
+                this.y = (Math.random() - 0.5) * height;
+                
+                this.vx = 0; this.vy = 0;
+                this.size = Math.random() * 2.5 + 1.5;
+                this.colors = ['#ff4d6d', '#ff0055', '#ff758f', '#c9184a', '#ffffff'];
+                this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
+                this.baseAlpha = Math.random() * 0.5 + 0.5;
+                this.friction = 0.88;
+                this.ease = 0.04;
+            }
+
+            update(pulseScale) {
+                const tx = this.targetX * pulseScale;
+                const ty = this.targetY * pulseScale;
+
+                const dx = tx - this.x;
+                const dy = ty - this.y;
+                
+                this.vx += dx * this.ease;
+                this.vy += dy * this.ease;
+
+                if (interaction.active) {
+                    const screenTargetX = this.x + width / 2;
+                    const screenTargetY = this.y + height / 2;
+                    
+                    const ix = screenTargetX - interaction.x;
+                    const iy = screenTargetY - interaction.y;
+                    const dist = Math.sqrt(ix * ix + iy * iy);
+
+                    if (dist < interaction.radius) {
+                        const force = (1 - dist / interaction.radius) * 12;
+                        const angle = Math.atan2(iy, ix);
+                        this.vx += Math.cos(angle) * force;
+                        this.vy += Math.sin(angle) * force;
+                    }
+                }
+
+                this.vx *= this.friction;
+                this.vy *= this.friction;
+
+                this.x += this.vx;
+                this.y += this.vy;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(width / 2, height / 2);
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.shadowColor = '#ff0055';
+                ctx.shadowBlur = 8;
+                ctx.globalAlpha = this.baseAlpha;
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function init() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                const t = (i / particleCount) * Math.PI * 2;
+                const pos = getHeartPoint(t);
+                const randomOffset = (Math.random() - 0.5) * 8;
+                particles.push(new Particle(pos.x + randomOffset, pos.y + randomOffset));
+            }
+        }
+
+        let time = 0;
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+
+            time += 0.04;
+            const pulseScale = 1 + Math.sin(time) * 0.08 + Math.pow(Math.sin(time * 2), 2) * 0.03;
+
+            particles.forEach(p => {
+                p.update(pulseScale);
+                p.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        // Mouse & Touch events
+        window.addEventListener('mousemove', (e) => {
+            interaction.x = e.clientX; interaction.y = e.clientY; interaction.active = true;
+        });
+        window.addEventListener('mouseleave', () => { interaction.active = false; });
+        window.addEventListener('touchstart', (e) => {
+            interaction.active = true; interaction.x = e.touches[0].clientX; interaction.y = e.touches[0].clientY;
+        }, { passive: true });
+        window.addEventListener('touchmove', (e) => {
+            interaction.x = e.touches[0].clientX; interaction.y = e.touches[0].clientY;
+        }, { passive: true });
+        window.addEventListener('touchend', () => { interaction.active = false; });
+
+        init();
+        animate();
+    </script>
+</body>
+</html>
